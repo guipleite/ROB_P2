@@ -58,7 +58,7 @@ movimentos = movimentos_relativos
 
 def cria_particulas(minx=0, miny=0, maxx=largura, maxy=altura, n_particulas=num_particulas):
    
-    return create_particles(robot.pose(),maxx/2 , maxy/2 , math.pi, n_particulas) #lista com partículas
+   return create_particles(robot.pose(),maxx/2 , maxy/2 , math.pi, n_particulas) #lista com partículas
     
 def move_particulas(particulas, movimento):
     
@@ -79,7 +79,7 @@ def leituras_laser_evidencias(robot, particulas):
       leitura_particula = inspercles.nb_lidar(particula, angles)
 
       for dado in leitura_particula:
-        Pdado = norm.pdf(leitura_particula[dado],num_particulas,7)
+        Pdado = norm.pdf(leitura_particula[dado],leitura_robo[dado],7)
         #print(Pdado)
         _sum+=Pdado
 
@@ -101,9 +101,9 @@ def reamostrar(particulas, n_particulas = num_particulas):
     particulas = draw_random_sample(particulas, part_weightList, n_particulas)
 
     for particula in particulas:
-        particula.x = norm.rvs(particula.x,7)
-        particula.y =  norm.rvs(particula.y,7)
-        particula.theta =  norm.rvs(particula.theta,0.1)
-        particula.w = 1/num_particulas
-    
+        particula.x = norm.rvs(particula.x,10)
+        particula.y =  norm.rvs(particula.y,10)
+        particula.theta =  norm.rvs(particula.theta,0.01)
+        particula.w = 1/n_particulas
+
     return particulas
