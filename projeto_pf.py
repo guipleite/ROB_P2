@@ -69,38 +69,38 @@ def move_particulas(particulas, movimento):
     
 def leituras_laser_evidencias(robot, particulas):
 
-    leitura_robo = inspercles.nb_lidar(robot, angles)
+    leitura_robo = inspercles.nb_lidar(robot, angles)#leitura do robo
     
-    somaT = []
+    s = [] 
 
     for particula in particulas:
       _sum = 0
 
-      leitura_particula = inspercles.nb_lidar(particula, angles)
+      leitura_particula = inspercles.nb_lidar(particula, angles)#leitura de uma das particulas
 
       for dado in leitura_particula:
-        Pdado = norm.pdf(leitura_particula[dado],leitura_robo[dado],7)
+        Pdado = norm.pdf(leitura_particula[dado],leitura_robo[dado],10)#pdf para cada dado da particula e do robo
         #print(Pdado)
-        _sum+=Pdado
+        _sum+=Pdado #somatória das probabilidades
 
       if _sum == 0.0:
           _sum =  0.0000000000000000000000000000000000001
      # print(_sum)
   
-      somaT.append(_sum)
-
-      #print(len(somaT)-len(particulas))
+      s.append(_sum)
+      alpha = 1/sum(s)
+      #print(len(s)-len(particulas))
 
     for particula in range(len(particulas)):
-      particulas[particula].w = somaT[particula]*(1/sum(somaT))    
+      particulas[particula].w = s[particula]*alpha #calcula o peso de cada particula    
     
 def reamostrar(particulas, n_particulas = num_particulas):
 
-    part_weightList = [particula.w for particula in particulas]
+    part_weightList = [particula.w for particula in particulas] #lista das probabilidades das particulas
 
     particulas = draw_random_sample(particulas, part_weightList, n_particulas)
 
-    for particula in particulas:
+    for particula in particulas: #cria novas particulas com uma distribuião normal
         particula.x = norm.rvs(particula.x,10)
         particula.y =  norm.rvs(particula.y,10)
         particula.theta =  norm.rvs(particula.theta,0.01)
